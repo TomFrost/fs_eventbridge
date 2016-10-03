@@ -1,0 +1,14 @@
+[package]
+name = "fs_eventbridge"
+version = "0.1.0"
+authors = [
+	"TechnologyAdvice <devteam@technologyadvice.com>",
+	"Tom Shawver <tom@frosteddesign.com>"
+]
+
+[dependencies]
+regex = "0.1.77"
+lazy_static = "0.2.1"
+filetime = "0.1.10"
+time = "0.1.35"
+
