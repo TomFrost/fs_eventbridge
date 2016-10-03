@@ -1,3 +1,8 @@
+/*
+ * FS-EventBridge
+ * Copyright (c) 2016, TechnologyAdvice LLC
+ */
+
 #[macro_use] extern crate lazy_static;
 extern crate regex;
 extern crate filetime;

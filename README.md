@@ -43,10 +43,13 @@ Prints a help page of all commands
 Marks a remote file as changed (triggering the OS-specific filesystem event change notifications). The file's atime and mtime will be set to the current system time by default. Optionally, specifying mtime allows these times to be set to any arbitrary timestamp. It should be provided as Epoch seconds.
 
 ## Why?
-Engineers using MacOS and Docker have wrestled with not having FSEvents file change notifications propagate to the docker VM for too long -- particularly thouse mounting shares via NFS. Hacks that try to fire `touch` commands off via SSH are slow and unreliable. FS-EventBridge was created to run on the root Boot2Docker VM, allowing other tooling (official client coming soon) to listen for changes on the host OS and forward them through the event bridge in real time, over a single low-overhead connection.
+Engineers using MacOS and Docker have wrestled with not having FSEvents file change notifications propagate to the docker VM's inotify for too long -- particularly those mounting shares via NFS. Hacks that try to fire `touch` commands off via SSH are slow and unreliable. FS-EventBridge was created to run on the root Boot2Docker VM, allowing other tooling (official client coming soon) to listen for changes on the host OS and forward them through the event bridge in real time, over a single low-overhead connection.
 
 ## Disclaimer
 This is my first non-toy Rust app, and may destroy all your servers. It's also under early development. Use at your own risk. Friendly constructive criticism is _very_ appreciated!
+
+## License
+FS-EventBridge is distributed under the ISC license. See LICENSE.txt for details.
 
 ## Credits
 FS-EventBridge was created by Tom Shawver at TechnologyAdvice.
