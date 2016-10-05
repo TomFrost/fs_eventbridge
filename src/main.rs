@@ -5,47 +5,26 @@
 
 #[macro_use] extern crate lazy_static;
 extern crate regex;
-extern crate filetime;
-extern crate time;
+
+mod commands;
 
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 use std::str;
 use regex::Regex;
-use filetime::FileTime;
 
 // Traits
 use std::io::Read;
 use std::io::Write;
-use std::error::Error;
 
 // Global constants
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 fn run_command(cmd: &str, args: &str) -> String {
-    lazy_static! {
-        static ref CHANGE_REGEX: Regex = Regex::new(r"^(.+?)(?:\s(\d+))?\s*$").unwrap();
-    }
     if cmd == "HELP" {
-        String::from("Commands:\n\
-            CHANGE /path/to/file mtime\n\
-            \tMarks the given file path as changed. The mtime argument can optionally\n\
-            \tbe specified (in seconds) to set an explicit modified time.")
+        commands::help::execute()
     } else if cmd == "CHANGE" {
-        match CHANGE_REGEX.captures(args) {
-            None => String::from("ERR Invalid args"),
-            Some(parsed_args) => {
-                let path = parsed_args.at(1).unwrap();
-                let mtime = parsed_args.at(2)
-                    .and_then(|m| m.parse().ok())
-                    .unwrap_or(time::get_time().sec as u64);
-                let mtime_ft = FileTime::from_seconds_since_1970(mtime, 0);
-                match filetime::set_file_times(path, mtime_ft, mtime_ft) {
-                    Err(e) => format!("ERR {}", e.description()),
-                    Ok(_) => format!("OK {}", args)
-                }
-            }
-        }
+        commands::change::execute(args)
     } else {
         String::from("ERR Unknown command. Send HELP for command list.")
     }
