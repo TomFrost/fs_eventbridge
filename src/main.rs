@@ -66,17 +66,38 @@ fn run_command(cmd: &str, args: &str) -> String {
     resp
 }
 
-fn handle_client(client_num: u32, mut stream: TcpStream) {
-    println!("[{}] Client connected", client_num);
+fn process_line(line: &str) -> String {
     lazy_static! {
         static ref CMD_REGEX: Regex = Regex::new(r"^([A-Z]+)(?:\s(.+))?\s*").unwrap();
     }
-    let mut buf;
+    let resp: String;
+    let cmd_caps_opt = CMD_REGEX.captures(line);
+    match cmd_caps_opt {
+        None => {
+            resp = String::from("ERR Bad command format. Send HELP for details.");
+        },
+        Some(_) => {
+            let cmd_caps = cmd_caps_opt.unwrap();
+            let cmd = cmd_caps.at(1).unwrap();
+            let args = cmd_caps.at(2).unwrap_or("");
+            resp = run_command(&cmd, &args);
+        },
+    };
+    resp
+}
+
+fn handle_client(client_num: u32, mut stream: TcpStream) {
+    println!("[{}] Client connected", client_num);
+    lazy_static! {
+        static ref CRLF_REGEX: Regex = Regex::new(r"[\r\n]+").unwrap();
+    }
+    let mut byte_buf;
+    let mut str_buf = String::from("");
+    let mut failed = false;
     loop {
-        buf = [0; 512];
-        let line;
-        let mut resp;
-        let _ = match stream.read(&mut buf) {
+        // Start with a 0-filled byte buffer
+        byte_buf = [0; 512];
+        let _ = match stream.read(&mut byte_buf) {
             Err(e) => panic!("[{}] Got an error: {}", client_num, e),
             Ok(m) => {
                 if m == 0 {
@@ -87,29 +108,35 @@ fn handle_client(client_num: u32, mut stream: TcpStream) {
                 m
             },
         };
-
-        line = str::from_utf8(&buf).unwrap();
-        println!("[{}|RX] {}", client_num, line);
-        let cmd_caps_opt = CMD_REGEX.captures(line);
-        match cmd_caps_opt {
-            None => {
-                resp = String::from("ERR Bad command format. Send HELP for details.");
-            },
-            Some(_) => {
-                let cmd_caps = cmd_caps_opt.unwrap();
-                let cmd = cmd_caps.at(1).unwrap();
-                let args = cmd_caps.at(2).unwrap_or("");
-                resp = run_command(&cmd, &args);
-            },
-        };
-
-        println!("[{}|TX] {}", client_num, resp);
-        resp.push('\n');
-        let bytes = resp.as_bytes();
-        match stream.write(&bytes) {
-            Err(_) => break,
-            Ok(_) => continue,
-        };
+        // Parse the string data from the byte buffer, crushing line breaks to a single \n
+        let input = str::from_utf8(&byte_buf).unwrap().trim_right_matches('\u{0}');
+        let input = CRLF_REGEX.replace(input, "\n");
+        let input = input.as_str();
+        // Append the new string data after any unprocessed data we already have
+        str_buf.push_str(input);
+        // Split our lines at the \n. The last element (usually "") becomes unprocessed data
+        let str_buf_clone = str_buf.clone();
+        let mut lines: Vec<&str> = str_buf_clone.split('\n').collect();
+        str_buf = String::from(lines.pop().unwrap_or(""));
+        // Iterate over all \n-terminated lines
+        let line_iterator = lines.iter();
+        for line in line_iterator {
+            println!("[{}|RX] {}", client_num, line);
+            let mut resp = process_line(line);
+            println!("[{}|TX] {}", client_num, resp);
+            resp.push('\n');
+            let bytes = resp.as_bytes();
+            match stream.write(&bytes) {
+                Err(_) => {
+                    failed = true;
+                    break;
+                },
+                Ok(_) => continue,
+            };
+        }
+        if failed {
+            break;
+        }
     }
 }
 

@@ -32,7 +32,7 @@ Connect to the TCP server using your favorite language/library/client. Or use `t
 telnet localhost 65056
 ```
 
-All commands are newline-terminated and should be sent individually.
+All commands are terminated by CR, LF, or any combination thereof. They can be streamed in any fashion; FS-EventBridge will service commands in the order in which they are received, as soon as a newline character is reached.
 
 ### Commands
 
@@ -52,5 +52,4 @@ This is my first non-toy Rust app, and may destroy all your servers. It's also u
 FS-EventBridge is distributed under the ISC license. See LICENSE.txt for details.
 
 ## Credits
-FS-EventBridge was created by Tom Shawver at TechnologyAdvice.
-
+FS-EventBridge was created by Tom Shawver at TechnologyAdvice in 2016.
