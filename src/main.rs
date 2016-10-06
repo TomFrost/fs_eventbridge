@@ -5,20 +5,31 @@
 
 #[macro_use] extern crate lazy_static;
 extern crate regex;
+extern crate clap;
 
 mod commands;
 
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 use std::str;
+use std::process;
 use regex::Regex;
+use clap::{Arg, App};
 
 // Traits
 use std::io::Read;
 use std::io::Write;
+use std::error::Error;
 
 // Global constants
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+
+macro_rules! eprintln {
+    ($($tt:tt)*) => {{
+        use std::io::Write;
+        let _ = writeln!(&mut ::std::io::stderr(), $($tt)*);
+    }}
+}
 
 fn run_command(cmd: &str, args: &str) -> String {
     if cmd == "HELP" {
@@ -84,14 +95,21 @@ fn handle_client(client_num: u32, mut stream: TcpStream) {
     }
 }
 
-fn main() {
-    let listen_on = "0.0.0.0:65056";
+fn start(bind_ip: &str, port: &str) {
+    let listen_on = format!("{}:{}", bind_ip, port);
+    let listen_on = listen_on.as_str();
     let mut conn_count = 0;
-    let listener = TcpListener::bind(listen_on).unwrap();
+    let listener = match TcpListener::bind(listen_on) {
+        Err(e) => {
+            eprintln!("Failed to start server: {}", e.description());
+            process::exit(102);
+        }
+        Ok(m) => m
+    };
     println!("FS-EventBridge v{} listening on {}", VERSION, listen_on);
     for stream in listener.incoming() {
         match stream {
-            Err(e) => { println!("failed: {}", e) }
+            Err(e) => { eprintln!("failed: {}", e) }
             Ok(stream) => {
                 let client_num: u32 = conn_count;
                 conn_count = conn_count.wrapping_add(1);
@@ -101,5 +119,28 @@ fn main() {
             }
         }
     }
+}
+
+fn main() {
+    let matches = App::new("FS-EventBridge")
+        .version(VERSION)
+        .about("Filesystem event bridge server")
+        .arg(Arg::with_name("port")
+            .short("p")
+            .long("port")
+            .help("The TCP port to open")
+            .value_name("PORT")
+            .default_value("65056")
+            .empty_values(false))
+        .arg(Arg::with_name("bind_ip")
+            .short("i")
+            .long("bind_ip")
+            .help("The IP address of the interface on which to bind")
+            .value_name("IP_ADDRESS")
+            .default_value("0.0.0.0")
+            .empty_values(false))
+        .get_matches();
+
+    start(matches.value_of("bind_ip").unwrap(), matches.value_of("port").unwrap());
 }
 

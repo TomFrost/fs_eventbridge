@@ -23,7 +23,7 @@ Copy the binary to the remote location, and run:
 ./fs_eventbridge
 ```
 
-FS-EventBridge will launch and listen on port 65056 on all interfaces. This is currently hardcoded!
+FS-EventBridge will launch and listen on port 65056 on all interfaces. Command line arguments can be specified to change the port and the bound IP address. Launch with `--help` for details.
 
 ## Using
 Connect to the TCP server using your favorite language/library/client. Or use `telnet` (replace localhost with the IP of the machine running FS-EventBridge, if not local):
@@ -44,9 +44,6 @@ Marks a remote file as changed (triggering the OS-specific filesystem event chan
 
 ## Why?
 Engineers using MacOS and Docker have wrestled with not having FSEvents file change notifications propagate to the docker VM's inotify for too long -- particularly those mounting shares via NFS. Hacks that try to fire `touch` commands off via SSH are slow and unreliable. FS-EventBridge was created to run on the root Boot2Docker VM, allowing other tooling (official client coming soon) to listen for changes on the host OS and forward them through the event bridge in real time, over a single low-overhead connection.
-
-## Disclaimer
-This is my first non-toy Rust app, and may destroy all your servers. It's also under early development. Use at your own risk. Friendly constructive criticism is _very_ appreciated!
 
 ## License
 FS-EventBridge is distributed under the ISC license. See LICENSE.txt for details.
