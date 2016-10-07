@@ -74,10 +74,10 @@ fn handle_client(client_num: u32, mut stream: TcpStream) {
                 break;
             },
             Ok(n) => cmd_buf.extend_from_slice(&rx_buf[..n])
-        }
+        };
         cmd_buf = {
             // Split command buffer into terminated lines
-            let mut lines = rx_buf.split(|b| *b == b'\n');
+            let mut lines = cmd_buf.split(|b| *b == b'\n');
             // The last unterminated element is leftover buffer
             let new_buf = lines.next_back().unwrap().to_vec();
             for line in lines {
