@@ -23,6 +23,8 @@ use std::error::Error;
 
 // Global constants
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+const ERR_UNKNOWN_CMD: &'static str = "ERR Unknown command. Send HELP for command list.";
+const ERR_BAD_CMD_FORMAT: &'static str = "ERR Bad command format. Send HELP for details.";
 
 macro_rules! eprintln {
     ($($tt:tt)*) => {{
@@ -37,7 +39,7 @@ fn run_command(cmd: &str, args: &str) -> String {
     } else if cmd == "CHANGE" {
         commands::change::execute(args)
     } else {
-        String::from("ERR Unknown command. Send HELP for command list.")
+        String::from(ERR_UNKNOWN_CMD)
     }
 }
 
@@ -47,7 +49,7 @@ fn process_line(line: &str) -> String {
     }
     match CMD_REGEX.captures(line) {
         None => {
-            String::from("ERR Bad command format. Send HELP for details.")
+            String::from(ERR_BAD_CMD_FORMAT)
         },
         Some(cmd_caps) => {
             let cmd = cmd_caps.at(1).unwrap();
@@ -144,3 +146,20 @@ fn main() {
     start(matches.value_of("bind_ip").unwrap(), matches.value_of("port").unwrap());
 }
 
+#[cfg(test)]
+mod tests {
+    use super::run_command;
+    use super::process_line;
+    use super::ERR_UNKNOWN_CMD;
+    use super::ERR_BAD_CMD_FORMAT;
+
+    #[test]
+    fn detects_unknown_command() {
+        assert_eq!(run_command("null", "").as_str(), ERR_UNKNOWN_CMD);
+    }
+
+    #[test]
+    fn detects_bad_command_format() {
+        assert_eq!(process_line("foo bar").as_str(), ERR_BAD_CMD_FORMAT);
+    }
+}
