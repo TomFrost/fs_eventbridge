@@ -1,4 +1,4 @@
-#FS-EventBridge
+#FS-EventBridge [![Build Status](https://travis-ci.org/TechnologyAdvice/fs_eventbridge.svg?branch=master)](https://travis-ci.org/TechnologyAdvice/fs_eventbridge)
 A TCP server to stream file-change events to a remote destination, such as a docker VM with files shared over NFS.
 
 ## Building
