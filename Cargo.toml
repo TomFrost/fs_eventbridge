@@ -5,12 +5,16 @@ authors = [
 	"TechnologyAdvice <devteam@technologyadvice.com>",
 	"Tom Shawver <tom@frosteddesign.com>"
 ]
-description = "A TCP server to stream file-change events to a remote destination"
+description = "A TCP server to stream file-change events to a remote destination or VM"
 documentation = "https://github.com/TechnologyAdvice/fs_eventbridge/blob/master/README.md"
 repository = "https://github.com/TechnologyAdvice/fs_eventbridge"
 readme = "README.md"
 keywords = ["fsevents", "kqueue", "inotify", "docker", "boot2docker"]
 license = "ISC"
+
+[[bin]]
+path = "src/main.rs"
+name = "fs_eventbridge"
 
 [dependencies]
 regex = "0.1.77"
