@@ -83,7 +83,7 @@ fn handle_client(client_num: u32, mut stream: TcpStream) {
             for line in lines {
                 // Convert to string, trim the CRs
                 let line = String::from_utf8_lossy(line);
-                let line = line.trim_right_matches('\r');
+                let line = line.trim_matches('\r');
                 println!("[{}|RX] {}", client_num, line);
                 let mut resp = process_line(line);
                 println!("[{}|TX] {}", client_num, resp);
