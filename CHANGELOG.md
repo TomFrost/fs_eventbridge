@@ -2,7 +2,8 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Development]
-Nothing yet!
+### Added
+- boot2docker/docker-machine VM install script
 
 ## v0.1.0
 ### Added

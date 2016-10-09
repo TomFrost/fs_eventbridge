@@ -50,3 +50,5 @@ FS-EventBridge is distributed under the ISC license. See LICENSE.txt for details
 
 ## Credits
 FS-EventBridge was created by Tom Shawver at TechnologyAdvice in 2016.
+
+Portions of the boot2docker install script were copied from [docker-machine-nfs](https://github.com/adlogix/docker-machine-nfs) by Toni Van de Voorde.
