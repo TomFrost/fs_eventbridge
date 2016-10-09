@@ -1,4 +1,14 @@
 #!/bin/sh
+###############################################################
+#
+# Copyright (c) 2016 TechnologyAdvice, LLC
+# See LICENSE.txt for software license details.
+#
+# Portions taken from the fantastic docker-machine-nfs,
+# which is Copyright 2015 Toni Van de Voorde (MIT). Find it
+# here: https://github.com/adlogix/docker-machine-nfs
+#
+###############################################################
 
 set -o errexit
 
@@ -90,7 +100,7 @@ installEventBridge() {
     scorpil/rust cargo install fs_eventbridge --force
   res=$?
   if [ "$res" -ne "0" ]; then
-    echoError " Install failed. Please post the above log to https://github.com/TechnologyAdvice/fs_eventbridge/issues"
+    echoError "Install failed. Please post the above log to https://github.com/TechnologyAdvice/fs_eventbridge/issues"
     exit 2
   fi
   echoSuccess "fs_eventbridge successfully copied to $INSTALL_DIR"
