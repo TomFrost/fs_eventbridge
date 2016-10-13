@@ -25,9 +25,9 @@ chmod +x /tmp/boot2docker_install.sh
 Once this completes, you're all set. No need to read the _Building_ or _Executing_ sections below.
 
 ## Clients
+- [fsbridge](https://github.com/TechnologyAdvice/fsbridge): A simple CLI client for watching a file or folder for changes and forwarding them over the bridge.
 - [DevLab](https://github.com/TechnologyAdvice/DevLab): A docker-compose alternative for streamlined docker-based development. FS-EventBridge support is built in, just set `FS_EVENTBRIDGE_PORT=65056` in your environment variables.
 - [fs-eventbridge-js](http://github.com/TechnologyAdvice/fs-eventbridge-js): A Node.js library that watches for file changes and streams them to the FS-EventBridge server. 
-- A standalone CLI utility based on fs-eventbridge-js coming soon.
 
 ## Building
 For use on the local OS:
