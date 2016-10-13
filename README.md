@@ -17,9 +17,7 @@ eval $(docker-machine env default)
 Once that's complete, or if you already had NFS set up, download and execute the FS-EventBridge installer! No need to clone this repo.
 
 ```
-curl https://raw.githubusercontent.com/TechnologyAdvice/fs_eventbridge/master/scripts/boot2docker_install.sh > /tmp/boot2docker_install.sh
-chmod +x /tmp/boot2docker_install.sh
-/tmp/boot2docker_install.sh
+sh <(curl -fsSL https://rawgit.com/TechnologyAdvice/fs_eventbridge/master/scripts/boot2docker_install.sh)
 ```
 
 Once this completes, you're all set. No need to read the _Building_ or _Executing_ sections below.
