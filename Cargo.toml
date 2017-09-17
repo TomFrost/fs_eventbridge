@@ -2,12 +2,11 @@
 name = "fs_eventbridge"
 version = "0.1.0"
 authors = [
-	"TechnologyAdvice <devteam@technologyadvice.com>",
 	"Tom Shawver <tom@frosteddesign.com>"
 ]
 description = "A TCP server to stream file-change events to a remote destination or VM"
-documentation = "https://github.com/TechnologyAdvice/fs_eventbridge/blob/master/README.md"
-repository = "https://github.com/TechnologyAdvice/fs_eventbridge"
+documentation = "https://github.com/TomFrost/fs_eventbridge/blob/master/README.md"
+repository = "https://github.com/TomFrost/fs_eventbridge"
 readme = "README.md"
 keywords = ["fsevents", "kqueue", "inotify", "docker", "boot2docker"]
 license = "ISC"

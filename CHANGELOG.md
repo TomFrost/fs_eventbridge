@@ -9,4 +9,4 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial release
 
-[Development]: https://github.com/TechnologyAdvice/Squiss/compare/v0.1.0...HEAD
+[Development]: https://github.com/TomFrost/Squiss/compare/v0.1.0...HEAD

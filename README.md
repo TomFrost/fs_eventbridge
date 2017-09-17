@@ -1,4 +1,4 @@
-#FS-EventBridge [![Build Status](https://travis-ci.org/TechnologyAdvice/fs_eventbridge.svg?branch=master)](https://travis-ci.org/TechnologyAdvice/fs_eventbridge)
+#FS-EventBridge [![Build Status](https://travis-ci.org/TomFrost/fs_eventbridge.svg?branch=master)](https://travis-ci.org/TomFrost/fs_eventbridge)
 A TCP server to stream file-change events to a remote destination, such as a docker VM with files shared over NFS.
 
 ## Installing into a docker-machine on Mac
@@ -17,15 +17,15 @@ eval $(docker-machine env default)
 Once that's complete, or if you already had NFS set up, download and execute the FS-EventBridge installer! No need to clone this repo.
 
 ```
-sh <(curl -fsSL https://rawgit.com/TechnologyAdvice/fs_eventbridge/master/scripts/boot2docker_install.sh)
+sh <(curl -fsSL https://rawgit.com/TomFrost/fs_eventbridge/master/scripts/boot2docker_install.sh)
 ```
 
 Once this completes, you're all set. No need to read the _Building_ or _Executing_ sections below.
 
 ## Clients
-- [fsbridge](https://github.com/TechnologyAdvice/fsbridge): A simple CLI client for watching a file or folder for changes and forwarding them over the bridge.
+- [fsbridge](https://github.com/TomFrost/fsbridge): A simple CLI client for watching a file or folder for changes and forwarding them over the bridge.
 - [DevLab](https://github.com/TechnologyAdvice/DevLab): A docker-compose alternative for streamlined docker-based development. FS-EventBridge support is built in, just set `FS_EVENTBRIDGE_PORT=65056` in your environment variables.
-- [fs-eventbridge-js](http://github.com/TechnologyAdvice/fs-eventbridge-js): A Node.js library that watches for file changes and streams them to the FS-EventBridge server. 
+- [fs-eventbridge-js](http://github.com/TomFrost/fs-eventbridge-js): A Node.js library that watches for file changes and streams them to the FS-EventBridge server. 
 
 ## Building
 For use on the local OS:
@@ -75,6 +75,6 @@ Engineers using MacOS and Docker have wrestled with not having FSEvents file cha
 FS-EventBridge is distributed under the ISC license. See LICENSE.txt for details.
 
 ## Credits
-FS-EventBridge was created by Tom Shawver at TechnologyAdvice in 2016.
+FS-EventBridge was originally created at [TechnologyAdvice](http://technologyadvice.com) in Nashville, TN.
 
 Portions of the boot2docker install script were copied from [docker-machine-nfs](https://github.com/adlogix/docker-machine-nfs) by Toni Van de Voorde (MIT, 2015).
